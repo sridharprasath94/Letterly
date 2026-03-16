@@ -43,3 +43,10 @@ jobs:
         with:
           name: letterly-apk
           path: letterly-*.apk
+
+      - name: Upload APK to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: letterly-*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

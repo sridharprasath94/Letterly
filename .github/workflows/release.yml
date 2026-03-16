@@ -1,11 +1,12 @@
-
-
 name: Build Release APK
 
 on:
   push:
     tags:
       - "v*"
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -21,17 +22,17 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Gradle Cache
-        uses: gradle/gradle-build-action@v2
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Run Unit Tests
-        run: ./gradlew test
+        run: ./gradlew test --no-daemon
 
       - name: Build Release APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease --no-daemon
 
       - name: Rename APK with version
         run: |
@@ -44,4 +45,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: letterly-apk
-          path: app/build/outputs/apk/release/letterly-*.apk
+          path: letterly-*.apk
+
+      - name: Upload APK to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: letterly-*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

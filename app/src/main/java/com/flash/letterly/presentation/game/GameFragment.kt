@@ -2,7 +2,6 @@ package com.flash.letterly.presentation.game
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -102,11 +101,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
                         }
 
                         GameEvent.DuplicateWord -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "Word has already been guessed",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            binding.root.showCenteredSnackBar("Word has already been guessed")
                         }
 
                         GameEvent.GameWon -> {
